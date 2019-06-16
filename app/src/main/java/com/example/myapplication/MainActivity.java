@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.graphics.YuvImage;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,9 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.AsyncSubject;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.ReplaySubject;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        asynchSubjectDemo1();
+        //asynchSubjectDemo2();
+        //behaviorSubjectDemo1();
+        //publishedSubjectDemo1();
+        //publishSubjectDemo2();
+        replaySubjectDemo1()
 
 
 
@@ -49,6 +57,118 @@ public class MainActivity extends AppCompatActivity {
         asyncSubject.subscribe(getFirstObserver());
         asyncSubject.subscribe(getSecondObserver());
         asyncSubject.subscribe(getThirdObserver());
+
+    }
+
+    void behaviorSubjectDemo1(){
+        Observable<String> observable=Observable.just("JAVA","KOTLIN","XML","JSON");
+        observable.subscribeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread());
+
+        BehaviorSubject<String> behaviorSubject = BehaviorSubject.create();
+
+        observable.subscribe(behaviorSubject);
+
+        behaviorSubject.subscribe(getFirstObserver());
+        behaviorSubject.subscribe(getSecondObserver());
+        behaviorSubject.subscribe(getThirdObserver());
+
+    }
+
+    void asynchSubjectDemo2(){
+
+
+        AsyncSubject<String> asyncSubject=AsyncSubject.create();
+
+
+        asyncSubject.subscribe(getFirstObserver());
+
+        asyncSubject.onNext("JAVA");
+        asyncSubject.onNext("KOTLIN");
+        asyncSubject.onNext("XML");
+
+
+        asyncSubject.subscribe(getSecondObserver());
+        asyncSubject.onNext("JSON");
+        asyncSubject.onComplete();
+
+
+        asyncSubject.subscribe(getThirdObserver());
+
+    }
+
+    void behaviorSubjectDemo2(){
+
+
+        BehaviorSubject<String> behaviorSubject=BehaviorSubject.create();
+
+
+        behaviorSubject.subscribe(getFirstObserver());
+
+        behaviorSubject.onNext("JAVA");
+        behaviorSubject.onNext("KOTLIN");
+        behaviorSubject.onNext("XML");
+
+
+        behaviorSubject.subscribe(getSecondObserver());
+        behaviorSubject.onNext("JSON");
+        behaviorSubject.onComplete();
+
+
+        behaviorSubject.subscribe(getThirdObserver());
+
+    }
+
+    void publishSubjectDemo2(){
+
+
+        PublishSubject<String> publishSubject=PublishSubject.create();
+
+
+        publishSubject.subscribe(getFirstObserver());
+
+        publishSubject.onNext("JAVA");
+        publishSubject.onNext("KOTLIN");
+        publishSubject.onNext("XML");
+
+
+        publishSubject.subscribe(getSecondObserver());
+        publishSubject.onNext("JSON");
+        publishSubject.onComplete();
+
+
+        publishSubject.subscribe(getThirdObserver());
+
+    }
+
+    void publishedSubjectDemo1(){
+
+        Observable<String> observable = Observable.just("JAVA","KOTLIN","XML","JSON")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        PublishSubject<String> publishSubject = PublishSubject.create();
+
+        observable.subscribe(publishSubject);
+
+        publishSubject.subscribe(getThirdObserver());
+        publishSubject.subscribe(getSecondObserver());
+        publishSubject.subscribe(getThirdObserver());
+
+    }
+
+    void replaySubjectDemo1(){
+
+        Observable<String> observable = Observable.just("JAVA","KOTLIN","XML","JSON")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        ReplaySubject<String> replaySubject = ReplaySubject.create();
+
+        observable.subscribe(replaySubject);
+
+        replaySubject.subscribe(getThirdObserver());
+        replaySubject.subscribe(getSecondObserver());
+        replaySubject.subscribe(getThirdObserver());
 
     }
 
