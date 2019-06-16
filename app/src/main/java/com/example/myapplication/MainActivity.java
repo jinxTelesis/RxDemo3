@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
         //behaviorSubjectDemo1();
         //publishedSubjectDemo1();
         //publishSubjectDemo2();
-        replaySubjectDemo1()
+        //replaySubjectDemo1()
+        replaySubjectDemo2();
 
 
 
@@ -168,6 +169,28 @@ public class MainActivity extends AppCompatActivity {
 
         replaySubject.subscribe(getThirdObserver());
         replaySubject.subscribe(getSecondObserver());
+        replaySubject.subscribe(getThirdObserver());
+
+    }
+
+    void replaySubjectDemo2(){
+
+
+        ReplaySubject<String> replaySubject = ReplaySubject.create();
+
+
+        replaySubject.subscribe(getFirstObserver());
+
+        replaySubject.onNext("JAVA");
+        replaySubject.onNext("KOTLIN");
+        replaySubject.onNext("XML");
+
+
+        replaySubject.subscribe(getSecondObserver());
+        replaySubject.onNext("JSON");
+        replaySubject.onComplete();
+
+
         replaySubject.subscribe(getThirdObserver());
 
     }
